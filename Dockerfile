@@ -12,7 +12,7 @@ LABEL \
     org.opencontainers.image.documentation="https://github.com/trampgeek/jobeinabox" \
     org.opencontainers.image.source="https://github.com/trampgeek/jobeinabox"
 
-ARG TZ=Pacific/Auckland
+ARG TZ=Europe/Vienna
 # Set up the (apache) environment variables
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -32,32 +32,34 @@ COPY container-test.sh /
 # Configure apache
 # Configure php
 # Get and install jobe
+# Configure jobe
 # Clean up
 RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     echo "$TZ" > /etc/timezone && \
     apt-get update && \
     apt-get --no-install-recommends install -yq \
-        acl \
-        apache2 \
-        build-essential \
-        fp-compiler \
-        git \
-        libapache2-mod-php \
-        nano \
-        nodejs \
-        octave \
-        default-jdk \
-        php \
-        php-cli \
-        php-mbstring \
-        php-intl \
-        python3 \
-        python3-pip \
-        python3-setuptools \
-        sqlite3 \
-        sudo \
-        tzdata \
-        unzip && \
+    acl \
+    apache2 \
+    build-essential \
+    fp-compiler \
+    git \
+    libapache2-mod-php \
+    nano \
+    nodejs \
+    octave \
+    default-jdk \
+    php \
+    php-cli \
+    php-mbstring \
+    php-intl \
+    python3 \
+    python3-pip \
+    python3-setuptools \
+    sqlite3 \
+    sudo \
+    tzdata \
+    unzip && \
+    nano && \
     python3 -m pip install pylint && \
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
@@ -75,6 +77,10 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     apache2ctl start && \
     cd /var/www/html/jobe && \
     /usr/bin/python3 /var/www/html/jobe/install --max_uid=500 && \
+    sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" /var/www/html/jobe/application/config/config.php && \
+    sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" /var/www/html/jobe/application/config/config.php && \
+    /usr/bin/python3 /var/www/html/jobe/install --purge --max_uid=500 && \
+    pip install requests && \
     chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /var/www/html && \
     apt-get -y autoremove --purge && \
     apt-get -y clean && \

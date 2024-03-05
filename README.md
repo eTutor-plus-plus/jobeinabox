@@ -1,10 +1,5 @@
 # JobeInABox
 
-![Docker Stars](https://img.shields.io/docker/stars/trampgeek/jobeinabox.svg)
-![Docker Pulls](https://img.shields.io/docker/pulls/trampgeek/jobeinabox.svg)
-![Docker Automated](https://img.shields.io/docker/cloud/automated/trampgeek/jobeinabox.svg)
-![Docker Build](https://img.shields.io/docker/cloud/build/trampgeek/jobeinabox.svg)
-
 The [Moodle CodeRunner question type plugin](https://moodle.org/plugins/qtype_coderunner) requires a [Jobe server](https://github.com/trampgeek) on which to run student-submitted jobs. [JobeInABox](https://hub.docker.com/r/trampgeek/jobeinabox/) is a Docker image that provides a basic Jobe server that runs all the standard languages. For full information on Jobe servers, see the 
 [full Jobe documentation](https://github.com/trampgeek/jobe)
 
@@ -32,25 +27,14 @@ You can then run your newly-built image with the command
 This will give you a jobe server running on port 4000, which can then be
 tested locally and used by Moodle as explained in the section "Using jobeinabox" below.
 
-## Using the pre-built jobeinabox image on docker hub
-
-To run the pre-built Docker Hub image, just enter the command:
-
-    sudo docker run -d -p 4000:80 --name jobe trampgeek/jobeinabox:latest
-
-This will give you a jobe server running on port 4000, which can then be
-tested locally and used by Moodle as explained in the section "Using jobeinabox" below.
-
 ## Setting the number of jobe users
 
-By default, Jobe will run up to 8 jobs simultaneously. This is usually a suitable
-value for 8-core systems but if you have more cores available you will probably
-want to raise this number. To do so, exec a shell in the container with a command of the form
+By default, Jobe will run up to 16 jobs simultaneously. To change the number, exec a shell in the container with a command of the form
 
     docker exec -it jobe bash
 
  and then:
- but does not have a mysql server installed so cannot use API-key access. For normal use, that's not a problem - API-key access is relevant only to Jobe servers delivering services to multiple client
+
     apt update; apt install nano
     nano  /var/www/html/jobe/application/config/config.php
 
