@@ -15,7 +15,7 @@ There are several ways to build and run a JobeInABox container, for example:
 
 For production use you should build your own image using the local timezone. In this example we use Docker as follows:
 
-Pull [this repo from Github](https://github.com/trampgeek/jobeinabox), cd into the jobeinabox directory and type a command
+Pull [this repo from Github](https://github.com/eTutor-plus-plus/jobeinabox), cd into the jobeinabox directory and type a command
 of the form
 
     sudo docker build . -t my/jobeinabox --build-arg TZ="Europe/Amsterdam"

@@ -58,8 +58,8 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     sqlite3 \
     sudo \
     tzdata \
+    nano \
     unzip && \
-    nano && \
     python3 -m pip install pylint && \
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
