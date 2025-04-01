@@ -59,6 +59,10 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     sudo \
     tzdata \
     nano \
+    gfortran \
+    libatlas-base-dev \
+    liblapack-dev \
+    libblas-dev \
     unzip && \
     python3 -m pip install pylint && \
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
