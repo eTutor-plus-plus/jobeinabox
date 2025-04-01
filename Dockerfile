@@ -81,6 +81,8 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" /var/www/html/jobe/application/config/config.php && \
     /usr/bin/python3 /var/www/html/jobe/install --purge --max_uid=500 && \
     pip install requests && \
+    pip install pandas && \
+    pip install numpy && \
     chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /var/www/html && \
     apt-get -y autoremove --purge && \
     apt-get -y clean && \
