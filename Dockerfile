@@ -78,7 +78,6 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     chmod 777 /var/crash && \
     echo '<!DOCTYPE html><html lang="en"><title>Jobe</title><h1>Jobe</h1></html>' > /var/www/html/index.html && \
     git clone https://github.com/trampgeek/jobe.git /var/www/html/jobe && \
-    apache2ctl start && \
     cd /var/www/html/jobe && \
     /usr/bin/python3 /var/www/html/jobe/install --max_uid=500 && \
     sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" /var/www/html/jobe/application/config/config.php && \
