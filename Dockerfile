@@ -79,7 +79,7 @@ RUN set -eux && \
     echo '<!DOCTYPE html><html lang="en"><title>Jobe</title><h1>Jobe</h1></html>' > /var/www/html/index.html && \
     git clone https://github.com/trampgeek/jobe.git /var/www/html/jobe && \
     cd /var/www/html/jobe && \
-    /usr/bin/python3 install --max_uid=500 && \
+    /usr/bin/python3 install --max_uid=500 --www_uid=33 && \
     sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" application/config/config.php && \
     sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" application/config/config.php && \
     /usr/bin/python3 install --purge --max_uid=500 && \
