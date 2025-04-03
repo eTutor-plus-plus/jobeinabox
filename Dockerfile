@@ -34,44 +34,44 @@ COPY container-test.sh /
 # Get and install jobe
 # Configure jobe
 # Clean up
-RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
+RUN set -eux && \
+    ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     echo "$TZ" > /etc/timezone && \
     apt-get update && \
     apt-get --no-install-recommends install -yq \
-    acl \
-    apache2 \
-    build-essential \
-    fp-compiler \
-    git \
-    libapache2-mod-php \
-    nano \
-    nodejs \
-    octave \
-    default-jdk \
-    php \
-    php-cli \
-    php-mbstring \
-    php-intl \
-    python3 \
-    python3-pip \
-    python3-setuptools \
-    sqlite3 \
-    sudo \
-    tzdata \
-    nano \
-    gfortran \
-    libatlas-base-dev \
-    liblapack-dev \
-    libblas-dev \
-    unzip && \
-    python3 -m pip install pylint && \
+      acl \
+      apache2 \
+      build-essential \
+      fp-compiler \
+      git \
+      libapache2-mod-php \
+      nano \
+      nodejs \
+      octave \
+      default-jdk \
+      php \
+      php-cli \
+      php-mbstring \
+      php-intl \
+      python3 \
+      python3-pip \
+      python3-setuptools \
+      sqlite3 \
+      sudo \
+      tzdata \
+      gfortran \
+      libatlas-base-dev \
+      liblapack-dev \
+      libblas-dev \
+      unzip && \
+    python3 -m pip install --no-cache-dir pylint && \
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
     sed -i "s/export LANG=C/export LANG=$LANG/" /etc/apache2/envvars && \
     sed -i '1 i ServerName localhost' /etc/apache2/apache2.conf && \
-    sed -i 's/ServerTokens\ OS/ServerTokens \Prod/g' /etc/apache2/conf-enabled/security.conf && \
-    sed -i 's/ServerSignature\ On/ServerSignature \Off/g' /etc/apache2/conf-enabled/security.conf && \
+    sed -i 's/ServerTokens\ OS/ServerTokens Prod/g' /etc/apache2/conf-enabled/security.conf && \
+    sed -i 's/ServerSignature\ On/ServerSignature Off/g' /etc/apache2/conf-enabled/security.conf && \
     rm /etc/apache2/sites-enabled/000-default.conf && \
     mv /000-jobe.conf /etc/apache2/sites-enabled/ && \
     mkdir -p /var/crash && \
@@ -79,15 +79,16 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     echo '<!DOCTYPE html><html lang="en"><title>Jobe</title><h1>Jobe</h1></html>' > /var/www/html/index.html && \
     git clone https://github.com/trampgeek/jobe.git /var/www/html/jobe && \
     cd /var/www/html/jobe && \
-    /usr/bin/python3 /var/www/html/jobe/install --max_uid=500 && \
-    sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" /var/www/html/jobe/application/config/config.php && \
-    sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" /var/www/html/jobe/application/config/config.php && \
-    /usr/bin/python3 /var/www/html/jobe/install --purge --max_uid=500 && \
-    pip install requests pandas numpy && \
+    /usr/bin/python3 install --max_uid=500 && \
+    sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" application/config/config.php && \
+    sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" application/config/config.php && \
+    /usr/bin/python3 install --purge --max_uid=500 && \
+    pip install --no-cache-dir requests pandas numpy && \
     chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /var/www/html && \
     apt-get -y autoremove --purge && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
+
 
 # Expose apache
 EXPOSE 80
