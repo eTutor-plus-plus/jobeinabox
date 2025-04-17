@@ -63,6 +63,7 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     python3 -m pip install pylint && \
     python3 -m pip install numpy &&\
     python3 -m pip install pandas &&\
+    python3 -m pip install mlxtend &&\
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
