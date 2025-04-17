@@ -61,8 +61,8 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     nano \
     unzip && \
     python3 -m pip install pylint && \
-    python3 -m pip install pandas && \
-    python3 -m pip install numpy && \
+    python3 -m pip install numpy &&\
+    python3 -m pip install pandas &&\
     pylint --reports=no --score=n --generate-rcfile > /etc/pylintrc && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
@@ -78,10 +78,11 @@ RUN ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && \
     git clone https://github.com/trampgeek/jobe.git /var/www/html/jobe && \
     apache2ctl start && \
     cd /var/www/html/jobe && \
+    if [ ! -z "${API_KEYS}" ]; then \
+    sed -i 's/$require_api_keys = false/$require_api_keys = true/' /var/www/html/jobe/app/Config/Jobe.php && \
+    sed -i "s/'2AAA7A.*/$API_KEYS/" /var/www/html/jobe/app/Config/Jobe.php \
+; fi && \
     /usr/bin/python3 /var/www/html/jobe/install --max_uid=500 && \
-    sed -i "s/\(\$config\['jobe_max_users'\] = \)8;/\1 16;/" /var/www/html/jobe/application/config/config.php && \
-    sed -i "s/\(\$config\['jobe_wait_timeout'\] = \)10;/\1 20;/" /var/www/html/jobe/application/config/config.php && \
-    /usr/bin/python3 /var/www/html/jobe/install --purge --max_uid=500 && \
     pip install requests && \
     chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /var/www/html && \
     apt-get -y autoremove --purge && \
